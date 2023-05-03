@@ -1,0 +1,30 @@
+import pandas as pd
+import numpy as np
+
+ufos = pd.read_csv('./data/ufos.csv')
+ufos.head()
+
+ufos = pd.DataFrame({'Seconds': ufos['duration (seconds)'], 'Country': ufos['country'],'Latitude': ufos['latitude'],'Longitude': ufos['longitude']})
+
+ufos.Country.unique()
+
+ufos.dropna(inplace=True)
+
+ufos = ufos[(ufos['Seconds'] >= 1) & (ufos['Seconds'] <= 60)]
+
+ufos.info()
+
+from sklearn.preprocessing import LabelEncoder
+
+ufos['Country'] = LabelEncoder().fit_transform(ufos['Country'])
+
+ufos.head()
+
+from sklearn.model_selection import train_test_split
+
+Selected_features = ['Seconds','Latitude','Longitude']
+
+X = ufos[Selected_features]
+y = ufos['Country']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
